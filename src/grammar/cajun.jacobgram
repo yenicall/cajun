@@ -1,0 +1,47 @@
+%left 'PLUS_FLOAT' 'MINUS_FLOAT' 'PLUS_INT' 'MINUS_INT'
+%left 'POW' 'MULT_FLOAT' 'DIV_FLOAT' 'MULT_INT' 'DIV_INT' 'MOD'
+
+Program = { Statement } function(stmts){ return new imports.Program(stmts);};
+
+Statement = 'id' '=' Expression function(id,_, exp){return new imports.Assignment(id,exp);}
+            | 'print' Expression function(_,exp){ return new imports.Print(exp);} ;
+ExpressionInt = ExpressionInt 'PLUS_INT' ExpressionInt function (e1, _, e2) {
+                                                return new imports.Integer.AddExp(e1,e2);
+                                            }
+
+Expression = Expression 'PLUS' Expression  function (e1, _, e2) {
+                                                             return new imports.AddExp(e1,e2);
+                                                         }
+            | Expression 'MINUS' Expression function (e1, _, e2) {
+                                                              return new imports.SubtractExp(e1,e2);
+                                                          }
+            | Expression 'MULT' Expression function (e1, _, e2) {
+                                                             return new imports.MultiplyExp(e1,e2);
+                                                         }
+            | Expression 'DIV' Expression function (e1, _, e2) {
+                                                               return new imports.DivideExp(e1,e2);
+                                                           }
+            | Expression 'POW' Expression function (e1, _, e2) {
+                                                                 return new imports.PowerExp(e1,e2);
+                                                                       }
+            | Expression 'MOD' Expression function (e1, _, e2) {
+                                                                 return new imports.ModuloExp(e1,e2);
+                                                                       }
+            | 'integer'  function (i) {
+                                             return new imports.Integer(i);
+                                         }
+            | 'float' function(f) {
+                                         return new imports.Float(f);
+            }
+            | 'string' function(s) {
+                    return new imports.String(s);
+            }
+            | 'id'  function (id) {
+                                        return new imports.Identifier(id);
+                                    }
+            | '(' Expression ')'   function (_, e) {
+                                                         return e;
+                                                     }
+
+
+;

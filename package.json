@@ -1,0 +1,22 @@
+{
+  "name": "Cajun",
+  "version": "0.0.1",
+  "description": "Cajun",
+  "main": "index.js",
+  "scripts": {
+    "test": ""
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/yenicall/cajun.git"
+  },
+  "author": "Pedro Mangabeira <pedro@easy-guild.net>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/yenicall/cajun/issues"
+  },
+  "homepage": "https://github.com/yenicall/cajun",
+  "devDependencies": {
+    "jacob": "^1.0.4"
+  }
+}

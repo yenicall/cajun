@@ -1,0 +1,76 @@
+%moduleName CajunLexer
+%%
+digits = [0-9]
+binDigits = [0-1]
+octalDigits = [0-8]
+hexaDigits = [a-eA-E0-9]
+%%
+<>-?{digits}*\.{digits}+    {
+    this.jjval = parseFloat(this.jjtext);
+    return 'float';
+}
+
+<>-?{digits}+   {
+    this.jjval = parseInt(this.jjtext,10);
+    return 'integer';
+}
+
+<>b\{-?{binDigits}+\} {
+    this.jjval = parseInt(this.jjtext.substr(2),2);
+    return 'integer';
+}
+
+<>o\{-?{octalDigits}+\} {
+    this.jjval = parseInt(this.jjtext.substr(2),8);
+    return 'integer';
+}
+
+<>h\{-?{hexaDigits}+\} {
+    this.jjval = parseInt(this.jjtext.substr(2),16);
+    return 'integer';
+}
+
+<DEFAULT>print {
+  return 'print';
+}
+
+<>\w+ { return 'id'; }
+
+<>\s* { }
+
+<>\+    { return 'PLUS_INT'; }
+<>\+\.    { return 'PLUS_FLOAT'; }
+<>- { return 'MINUS_INT';}
+<>\-\.    { return 'MINUS_FLOAT'; }
+<>\*\. { return 'MULT_FLOAT';}
+<>\* { return 'MULT_INT';}
+<>\/ { return 'DIV_INT';}
+<>\/\. { return 'DIV_FLOAT';}
+<>% { return 'MOD';}
+<>\*\* {return 'POW';}
+
+
+<>".*" {
+    return "string";
+}
+
+
+
+<>""" { this.string = [];
+this.pushState('STRINGSECTION'); }
+
+<STRINGSECTION>(\n|\r|.) { this.string.push(this.jjtext);}
+
+<STRINGSECTION>""" {
+    this.jjval = this.string.join("");
+    this.popState();
+    return "string";
+   }
+<>\(\*    { this.pushState('BLOCKCOMMENT'); }
+
+<BLOCKCOMMENT>\*\)    { this.popState(); }
+<BLOCKCOMMENT>(\n|\r|.) { this.comments.push(this.jjtext);}
+
+<>.   { return this.jjtext; }
+
+<>$   { console.log('EOF'); return 'EOF'; }
